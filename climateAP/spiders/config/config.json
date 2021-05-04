@@ -1,0 +1,24 @@
+{
+    "start_date": ["year_1901"],
+    "end_date": ["year_1902"],
+    "input_data": ["D:/Series of python/scrapy框架/climateAP/climateAP/spiders/config/输入.csv"],
+    "future": ["Select+a+GCM+and+a+period"],
+
+
+
+    "cookie": "WEIBOCN_FROM=1110006030; SUB=_2A25NjWmGDeRhGeBN6VIX-CrLyjyIHXVujnfOrDV6PUJbkdAKLUv3kW1NRJou901z92rA32dJ16SPgDiI6EBaX0XS; _T_WM=56142833155; MLOGIN=1; XSRF-TOKEN=d1279c; M_WEIBOCN_PARAMS=oid%3D4630991492353475%26lfid%3D102803%26luicode%3D20000174%26uicode%3D20000174",
+    "mysql_config": {
+        "host": "localhost",
+        "port": 3306,
+        "user": "root",
+        "password": "123456",
+        "database" : "climateap",
+        "charset": "utf8mb4"
+    },
+    "kafka_config": {
+        "bootstrap-server": "127.0.0.1:9092",
+        "weibo_topics": ["spider_weibo"],
+        "user_topics": ["spider_weibo"]
+    },
+    "sqlite_config": "weibo.db"
+}
