@@ -14,7 +14,7 @@ climateAP的爬虫程序；免费获取气候数据
 
 2.项目前置
 ---
-安装完成后，需要对项目config目录下的**config.json**文件进行配置，  
+安装完成后，需要对项目config目录下的**config.json**文件进行配置，文件中需要修改的几个变量介绍如下：  
 **start_date** : 气候数据开始年份，格式为 year_年份  
 **end_date** : 气候数据结束年份，格式为 year_年份  
 **input_data** : gps坐标数据的绝对路径（仅可使用csv文件），包含 lat（维度），lng（经度），el（海拔），示例文件为 '输入.csv'  
