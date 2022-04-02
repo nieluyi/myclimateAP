@@ -54,14 +54,11 @@ def _get_config2(logger,__file__):
 def read_gps(input_data):
     '''获取csv中gps数据'''
     data = pd.read_csv(input_data, encoding="utf-8")
-    data2 = pd.concat([data.lat, data.lng], axis=1, ignore_index=True)
-    data3 = pd.concat([data.el], axis=1, ignore_index=True)
-    els = []
+    data2 = pd.concat([data.lat, data.lng,data.el], axis=1, ignore_index=True)
     res = []
     for i in data2.index:
         res.append(data2.loc[i].tolist())
-        els.append(data3.loc[i].tolist())
-    return res,els
+    return res
 
 def equ_to_dic(List):
     for i in range(0, len(List)):

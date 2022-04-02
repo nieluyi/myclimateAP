@@ -13,7 +13,7 @@ BOT_NAME = 'climateAP'
 
 SPIDER_MODULES = ['climateAP.spiders']
 NEWSPIDER_MODULE = 'climateAP.spiders'
-
+REACTOR_THREADPOOL_MAXSIZE = 10
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'climateAP (+http://www.yourdomain.com)'
@@ -83,7 +83,7 @@ DEFAULT_REQUEST_HEADERS = {
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
    'climateAP.pipelines.ClimateapPipeline': 300,
-    'climateAP.pipelines.WebcrawlerScrapyPipeline': 300  # 保存到mysql数据库
+    #'climateAP.pipelines.WebcrawlerScrapyPipeline': 300  # 保存到mysql数据库
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -110,6 +110,6 @@ FEED_EXPORT_ENCODING = 'gb18030'
 
 
 
-
+HTTPERROR_ALLOWED_CODES = [403]#上面报的是403，就把403加入。
 
 

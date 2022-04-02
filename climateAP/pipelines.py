@@ -10,6 +10,7 @@ import csv
 import os
 import sys
 import logging
+
 class ClimateapPipeline:
     def __init__(self):
         self.headers1 = gethead1()
@@ -42,6 +43,7 @@ class ClimateapPipeline:
             self.writer1.writerow([
                                    item['x_lan'],
                                    item['y_lai'],
+                                   item['el'],
                                    item['year'],
                                    item['table'],
                                    item['MAT'] ,
@@ -66,6 +68,7 @@ class ClimateapPipeline:
             self.writer2.writerow([
                 item['x_lan'],
                 item['y_lai'],
+                item['el'],
                 item['year'],
                 item['table'],
                 item['Tmax_DJF'],
@@ -122,6 +125,7 @@ class ClimateapPipeline:
             self.writer3.writerow([
                 item['x_lan'],
                 item['y_lai'],
+                item['el'],
                 item['year'],
                 item['table'],
                 item['Tmax_01Kuo'],
@@ -312,7 +316,6 @@ class  WebcrawlerScrapyPipeline:
             sys.exit()
         try:
             connection = pymysql.connect(**self.mysql_config)
-
             self._mysql_create(connection, sql)
         except pymysql.OperationalError:
             logger.warning(u'系统中可能没有安装或正确配置MySQL数据库，请先根据系统环境安装或配置MySQL，再运行程序')

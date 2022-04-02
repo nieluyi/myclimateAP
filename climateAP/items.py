@@ -11,6 +11,7 @@ import scrapy
 class ClimateapItem1(scrapy.Item):
     x_lan   = scrapy.Field()
     y_lai   = scrapy.Field()
+    el      = scrapy.Field()
     year    = scrapy.Field()
     table   = scrapy.Field()
     MAT     = scrapy.Field()
@@ -34,6 +35,7 @@ class ClimateapItem1(scrapy.Item):
 class ClimateapItem2(scrapy.Item):
     x_lan       =  scrapy.Field()
     y_lai       =  scrapy.Field()
+    el = scrapy.Field()
     year        = scrapy.Field()
     table       =  scrapy.Field()
     Tmax_DJF    =  scrapy.Field()
@@ -89,6 +91,7 @@ class ClimateapItem2(scrapy.Item):
 class ClimateapItem3(scrapy.Item):
     x_lan       =  scrapy.Field()
     y_lai       =  scrapy.Field()
+    el = scrapy.Field()
     year        = scrapy.Field()
     table       =  scrapy.Field()
     Tmax_01Kuo          =   scrapy.Field()
@@ -235,3 +238,25 @@ class ClimateapItem3(scrapy.Item):
     CMD_10Kuo          =   scrapy.Field()
     CMD_11Kuo          =   scrapy.Field()
     CMD_12Kuo          =   scrapy.Field()
+
+
+
+
+class movie(scrapy.Item):
+    tvId             = scrapy.Field()
+    albumId          = scrapy.Field()
+    channelId        = scrapy.Field()
+    description      = scrapy.Field()
+    name             = scrapy.Field()
+    playUrl          = scrapy.Field()
+    isAdvance        = scrapy.Field()
+    payMark          = scrapy.Field()
+    payMarkUrl       = scrapy.Field()
+    imageUrl         = scrapy.Field()
+    duration         = scrapy.Field()
+    videoCount       = scrapy.Field()
+    latestOrder      = scrapy.Field()
+    categories       = scrapy.Field()
+    period           = scrapy.Field()
+    focus            = scrapy.Field()
+    people           = scrapy.Field()

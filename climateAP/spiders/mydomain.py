@@ -15,14 +15,15 @@ FLAGS = flags.FLAGS
 time = ''
 lat =''
 lng =''
-
+h=''
+#D:\Series of python\scrapy框架\备份\climateAP\climateAP\climateAP1.csv
 config = _get_config(logger,__file__)
 
 
 class MydomainSpider(scrapy.Spider):
     name = 'mydomain'
     # allowed_domains = ['climateap.net']
-    start_urls = ['http://climateap.net']
+    start_urls = ['https://climateap.net/']
 
     def __init__(self):
 
@@ -32,7 +33,7 @@ class MydomainSpider(scrapy.Spider):
         self.future = config["future"][0]
         self.input = config["input_data"]
 
-        self.gps, self.els = read_gps(self.input[0])  # source file name
+        self.gps  = read_gps(self.input[0])  # source file name
 
     def getDuration(self):
         '''读取起止日期，也可以选择未来策略'''
@@ -60,9 +61,11 @@ class MydomainSpider(scrapy.Spider):
         List1=equ_to_dic(Annual_variables)
         lat              =html.xpath('//tr/td/input[@name="txt_lat"]/@value')[0]
         lng              =html.xpath('//tr/td/input[@name="txt_lng"]/@value')[0]
+        h                =html.xpath('//tr/td/input[@name="txt_el"]/@value')[0]
         time             =html.xpath("//td/select[@id='DropD_hist']/option[@selected='selected']/text()")[0]
         item1['x_lan']   =lat
         item1['y_lai']   =lng
+        item1['el']      = h
         item1['year']    =time
         item1['table']   ='Annual_variables'
         item1['MAT']     =List1['MAT ']
@@ -89,6 +92,7 @@ class MydomainSpider(scrapy.Spider):
 
         item2['x_lan']          =  lat
         item2['y_lai']          =  lng
+        item2['el']             = h
         item2['year']           =  time
         item2['table']          =  'Seasonal_Variables'
         item2['Tmax_DJF']       =  List2['Tmax_DJF ']
@@ -146,6 +150,7 @@ class MydomainSpider(scrapy.Spider):
         List3 = equ_to_dic(Monthly_Variables)
         item3['x_lan']                =  lat
         item3['y_lai']                =  lng
+        item3['el'] = h
         item3['year']                 =  time
         item3['table']                =  'Monthly_Variables'
         item3['Tmax_01Kuo']           =  List3['Tmax(01) ']
@@ -295,25 +300,18 @@ class MydomainSpider(scrapy.Spider):
         yield item3
 
     def parse(self, response):#(self, response):
-        url = 'http://climateap.net'
+        url = 'https://climateap.net/'
 
         for Year in self.getDuration():
-            j = 0
             for i in self.gps:
-                global lat
-                lat=self.gps[0][0]
-                global lng
-                lng =self.gps[0][1]
                 global time
                 time=Year
 
-                el   = self.els[j][0]
-
-                j+=1
-
                 gcm  =  self.future#self.future[int(self.future_number)]
-
-                data = "__EVENTTARGET=&__EVENTARGUMENT=&__LASTFOCUS=&__VIEWSTATE=%2FwEPDwUJNzA3MDIxMzE1D2QWAgIDD2QWBgIJDxBkZBYBZmQCCw8QZGQWAWZkAjkPEGRkFgBkZMLh3PMaGvm9PqHNNzGmVfIlxB%2FH&__VIEWSTATEGENERATOR=CA0B0334&__EVENTVALIDATION=%2FwEdALIBIIhdu6zFzpNwKa9GTzMxTwdKP8A6iHeGLmbSkVNUG5%2FceWyrRrhfbPLdnF0N6HEQ6X4maMVkWn9uoLIWb6fmZLODNbptymJSqG8KBxavmPP5CURe%2BeVKuyZ4oAnhmBD7anHH1GRBJl5qglOmgJEeV1bOGcnULZEvJ0jQXWcosfE3Gph0Yo1nQOgwx746juel1E9Vwb18rDGnRFbgSTe4ZSsTrbmWHz5aOYycmuMropnaImlNBC%2BoeSCDjSTx2IHHvL%2Fr1%2BHflbVkkAxPDdByR1zRMV9gxRE3%2F2X7gN9PdKQVsD9WTzqC0a5E%2FxfE7w6U22JbT3NCgFkanvwIx9NIkEThqPrBEJHwaHZvXClAZUoH2tu6u5SME5jOdJgZlmOLL%2FDjJrU14qUPtVzMCCsVfXxLIvlL174YJm7oKsKxc7bKhHc%2B1haslPcgsVEc6FBHKAqLTtDhHOaNlItGNK95dbHAK4Z5SBCQWmWU3sHIZIPm2GQW0MYq3hrJxzA1BFW9nRFgxlAiNzVElTLzgXRHktwv%2BAMBiLZ97RIgqsS%2FX4v9aRb8Nbth8EThyPxFVkH97%2BGknRfFCCzefem1EXuKTby1807IP2mzmCAZUWW%2F2ttYMqXW5Z6WPqNO3HK6MuYFOz8clUZQ7I9jR41%2BopdQ5tb%2FBnWa1q%2FYIT8TNG3m6mbCGoRBmMXIZAP0K%2FKqQa7iFLTOLJidQEyx8YZHvdc6EjzJU%2FqPUW0QmdWuoFDiKSikOaWo%2BfWQ4tk1LTYgkRyHW2IPvF0Qyess4vvG%2BqCTSNGx1Encr2pRFMR8sbUcVmnznKq1lpAfTbhE4ews9hxj%2BPlwg%2Fgc7QILbQdn0yMMyLgcKWNMbrNCmMcjVKCW6srAjV43%2BjbQPrGxfdDult6DMPN36zflQRIWEIH0%2BbbsEfKLWz%2BDDTxzyY%2BHMU6%2FRxAnwbiUmZ6KbCf7Aa4bEj%2Fx87VK8ocScHVgdMxoXDah4kIZu5YlT9V0RjjVwT9e8H6Dtq35Nk9ZYmHvNl%2BlMm75Cmp6W%2Ftg4FXd0H4RlelgU0QN4n7EVPWlSPE5h51wyJEDrw%2F3SsYYTKsXS7SB1abOnIakES1vpv4yd6XWsVp7cvmTjmiK2IisEeru9iAvy8lilQZfkqJSyHzNYgEbMLRA18eWlL3XukcVwKF1r8dLd0cpJATYVMHNXZQ8tdsmBFRIVjgb6e3aVIvDR4Gj5GYsdW%2BUp5Yj%2BAvLQjkrzANW4okoX6ZpGACGLNpL0UgcBGCrVY%2BRl3Uq5aOiR4p37306gmvLnT7zaLlxlmAJGJSfmqR2ebqt648usAr0z7XjcAsW76fB0W9M96Dj1%2Ff1txO2V7UpfWT%2F0iH1X%2F%2B5gSdAJoDQF%2Fv8LucmfHct1pgNYU0SLkrkwq04a8aHEz8%2BfiM4nREHB9IQnugi1qkzb312OHej9hEqaoj6zUkIv0fcDGYdEXmfjZS7Fk1%2Fj9MW%2B%2FrS8WiOKnXCPlKiYUG6Q43BQp41M9wSpbjr3LFQH4qmb%2BjSQ25at0U0uYehF%2Bt1l3OhjtJbSVQ%2FUrBcGBgvE8LF2pFunCOg6aXyfPvn8agms5ahkPgXgbG91PLdcy7dD5jfKVtTv35RgAeq4wdqvG6bmLWGEtZ7giCT9ueH55jgl5iSMo3mX%2FflHqUfyoT5a6C4TZSYpYbs5gTav1G6bilqtth3wDISSeJjw0uDf71U1xE5v4sksQdsvj9N%2BQU0UsHj7i1RC60myyY%2F%2Bv4fI3mY743Hm%2FYI1SNE2IXMmcrPXnGpPVRE%2FxbO8M1KX8dOA4Y0jY%2BaqN%2BcuBHdj9U6cHCavouw%2FwmHQsrhYRA%2FSkunX4oveQf%2BDoxNefQBRle9%2B9%2B5Ex%2Bx6iIWQQEypnqko8NkdEg%2B2YHrCoOqk4ZtfsB6m4zp5vDCBS34hR656kmZI4PeFfn5DZAQ2WqeDvxo4ZT%2FKunw3DIpjtuYLXcucWdb009%2BcNglvkCIFSgkUmO1QDLdqAgA7XHoL1bflM5NtquytfH2Ref1K00LArIRsvQMsCFKT4tuLe2FDBacu9bOgA8gpchOxW6f9sRnkkBhiJbQRaSZQ8jZLtxcPHusW3SIAJAJAh1Elg9KFGeIN%2BKVDJeHwwHH0%2BojQH6oTVmzUXICic2g2j6QinV9JSQZWLO34POsNJI%2B1aVSKJ8RIwngsW7YodhYv7dVzQ7VqhMzcK2uLJwuKaR%2BnzKMjszEPL%2B3hT%2Bk6q77aCB41%2F6KwvfxH7XTH%2FrInQcEaxBZRcCWrhfHbnIlOoa%2Fn6xTbxDzxsWHd1K7KyjjKrcwJ%2FBtF8yn9d%2B%2FPW1%2BFJSNkIQoJKQazLo6VJ8do6V%2FcnT3sC5EKoZKAOiZZfnG1eFslvGu8IIJmpJQ0EoGKmdL2N93ZhhniX5xm%2B9b6%2B1fTDLeT6IBEtIcfS2pXKQhF7daBCaYDQVK5jGHkT8LwSyOVc16DQPb3bv6xkM%2F7CzS5mInrSdQmfD5xw3nzeMwkbz7U4fJxFg%2B%2Fq%2BlBeQ2DDrGCpOSAI3C7UOg7CEfncKB%2B5kN2%2BHDeKL3vq8gMJocJP3sAUbu17SrY2a94JK%2BVsGl2FvnkvnjgrEe%2Br8in%2F7SuGMBbjFevCJXbYbShQ8TXNs5M0XhfCSJNV7sgPSEi%2FMlsfK4uxfVr0nTnCEXjUZUAijyZjIZxrKLB5LwOcivJb152HVhI%2BFjI3eEI1140U8p6hmujMpw4qC0y6zNUq1hvO4%2Bx98CrtNPcstORv8cCmRwEfr7VSuZmj0z9BakQcFlChMPhh7n96tVtuJB9C9EoLVLWtstWj55ekyMaAHyGcAgvBURXKQdNNR8zNrgZvQnV41ZK1CvAZe0YiFBXYQ30rx1DQbGfFy0VMhM3Hlz%2FP4B7iqGm4v6RbZSTOFtYwU%2B68JmxxB%2F2zk8dOMoL14bD79YCDM%2BBGActdcuWcQd%2FmRWU3D1XPG%2BZLKFWpfqR%2BOWimZUvuWwxwj4Dv%2FUbi4PjS9YoX3w4X1YvrDNBBvC0fLKRwPKccIlJJptIPL6sFlFsGYZZJ2suGczWVgJLQzb5ZCfyRDSYtjkMn%2BzutOQ2n0C%2BG1LKDyB89456FsjyMX3pIdKUL2Qe%2BSTp8g8ss%2FkSKfQN45vg80q%2F1SN5tWNiZdJX1rpI0ijSS20GwWFcYdg97y%2Bm4MIVgIBpfWCe0l8jLFPxlNbf1c8HuIkPSTZqzFH6FCB%2BqkQR6hc%2FuAv3gFpXRrb3JHpL%2BK3a9uHaiJ9dNRSkAro3Nt7ZJYXe3Y63lWsiOLEC72ydvSOwpK7r172dzQle%2BRT3u9NNSGK18rl5ksODuoIPXwLjgb%2FxGOOXXqQ65DBiDf5163FGT0jM1B15zd3%2FtWwVJbVbsG%2BLJYCJ7l19kHLePh1Xpqr8lGzgz%2BJtyQ53ivR8G03NHgSM0m5SHRs2HotenOgNWcLT%2BDYpBcCSwxHj9qW0Ki0RpUm1shhwqMQSbQC8w%2F29av4XWTR6wnGfha7DlX0%2BvUv%2BRALZIyvoq%2BTY1ehUDR7SelOVpOsVWKvLZdll%2F0Zzfg78Z8BXhXifTCAVkevd0XbfyOK0Hd0uXlyafPgTOOAxcbEvL3%2BbUNlp8WWtLfKDneQ8RezB3RBRKc5DKZ41ZZYgDymPir0Zp4mFYzbkIiFO1BYkfsxnzcMxZ%2BpEWnATnHGCXm4xNRMd2LGtoyxQIL8yQ7aMWXJuMBsKPTdR1IYSDJx8Cyl%2FiqOcg0UHROpWJ%2FOSY2L8xqUWuN8kWgjWuiVAktcr8jjZKgUY0wJipCqrBmFAnX0Gq1uIAq6%2F7tLzqQrpjunyoLgSRPr2JvCXtjtQ40B3XBD8J36UQw2mYR29qwt" \
+                data = "__EVENTTARGET=&__EVENTARGUMENT=&__LASTFOCUS=&__VIEWSTATE=" \
+                       "%2FwEPDwUJNzA3MDIxMzE1D2QWAgIDD2QWBgIJDxBkZBYBZmQCCw8QZGQWAWZkAjkPEGRkFgBkZMLh3PMaGvm9PqHNNzGmVfIlxB%2FH" \
+                       "&__VIEWSTATEGENERATOR=CA0B0334" \
+                       "&__EVENTVALIDATION=%2FwEdALIBIIhdu6zFzpNwKa9GTzMxTwdKP8A6iHeGLmbSkVNUG5%2FceWyrRrhfbPLdnF0N6HEQ6X4maMVkWn9uoLIWb6fmZLODNbptymJSqG8KBxavmPP5CURe%2BeVKuyZ4oAnhmBD7anHH1GRBJl5qglOmgJEeV1bOGcnULZEvJ0jQXWcosfE3Gph0Yo1nQOgwx746juel1E9Vwb18rDGnRFbgSTe4ZSsTrbmWHz5aOYycmuMropnaImlNBC%2BoeSCDjSTx2IHHvL%2Fr1%2BHflbVkkAxPDdByR1zRMV9gxRE3%2F2X7gN9PdKQVsD9WTzqC0a5E%2FxfE7w6U22JbT3NCgFkanvwIx9NIkEThqPrBEJHwaHZvXClAZUoH2tu6u5SME5jOdJgZlmOLL%2FDjJrU14qUPtVzMCCsVfXxLIvlL174YJm7oKsKxc7bKhHc%2B1haslPcgsVEc6FBHKAqLTtDhHOaNlItGNK95dbHAK4Z5SBCQWmWU3sHIZIPm2GQW0MYq3hrJxzA1BFW9nRFgxlAiNzVElTLzgXRHktwv%2BAMBiLZ97RIgqsS%2FX4v9aRb8Nbth8EThyPxFVkH97%2BGknRfFCCzefem1EXuKTby1807IP2mzmCAZUWW%2F2ttYMqXW5Z6WPqNO3HK6MuYFOz8clUZQ7I9jR41%2BopdQ5tb%2FBnWa1q%2FYIT8TNG3m6mbCGoRBmMXIZAP0K%2FKqQa7iFLTOLJidQEyx8YZHvdc6EjzJU%2FqPUW0QmdWuoFDiKSikOaWo%2BfWQ4tk1LTYgkRyHW2IPvF0Qyess4vvG%2BqCTSNGx1Encr2pRFMR8sbUcVmnznKq1lpAfTbhE4ews9hxj%2BPlwg%2Fgc7QILbQdn0yMMyLgcKWNMbrNCmMcjVKCW6srAjV43%2BjbQPrGxfdDult6DMPN36zflQRIWEIH0%2BbbsEfKLWz%2BDDTxzyY%2BHMU6%2FRxAnwbiUmZ6KbCf7Aa4bEj%2Fx87VK8ocScHVgdMxoXDah4kIZu5YlT9V0RjjVwT9e8H6Dtq35Nk9ZYmHvNl%2BlMm75Cmp6W%2Ftg4FXd0H4RlelgU0QN4n7EVPWlSPE5h51wyJEDrw%2F3SsYYTKsXS7SB1abOnIakES1vpv4yd6XWsVp7cvmTjmiK2IisEeru9iAvy8lilQZfkqJSyHzNYgEbMLRA18eWlL3XukcVwKF1r8dLd0cpJATYVMHNXZQ8tdsmBFRIVjgb6e3aVIvDR4Gj5GYsdW%2BUp5Yj%2BAvLQjkrzANW4okoX6ZpGACGLNpL0UgcBGCrVY%2BRl3Uq5aOiR4p37306gmvLnT7zaLlxlmAJGJSfmqR2ebqt648usAr0z7XjcAsW76fB0W9M96Dj1%2Ff1txO2V7UpfWT%2F0iH1X%2F%2B5gSdAJoDQF%2Fv8LucmfHct1pgNYU0SLkrkwq04a8aHEz8%2BfiM4nREHB9IQnugi1qkzb312OHej9hEqaoj6zUkIv0fcDGYdEXmfjZS7Fk1%2Fj9MW%2B%2FrS8WiOKnXCPlKiYUG6Q43BQp41M9wSpbjr3LFQH4qmb%2BjSQ25at0U0uYehF%2Bt1l3OhjtJbSVQ%2FUrBcGBgvE8LF2pFunCOg6aXyfPvn8agms5ahkPgXgbG91PLdcy7dD5jfKVtTv35RgAeq4wdqvG6bmLWGEtZ7giCT9ueH55jgl5iSMo3mX%2FflHqUfyoT5a6C4TZSYpYbs5gTav1G6bilqtth3wDISSeJjw0uDf71U1xE5v4sksQdsvj9N%2BQU0UsHj7i1RC60myyY%2F%2Bv4fI3mY743Hm%2FYI1SNE2IXMmcrPXnGpPVRE%2FxbO8M1KX8dOA4Y0jY%2BaqN%2BcuBHdj9U6cHCavouw%2FwmHQsrhYRA%2FSkunX4oveQf%2BDoxNefQBRle9%2B9%2B5Ex%2Bx6iIWQQEypnqko8NkdEg%2B2YHrCoOqk4ZtfsB6m4zp5vDCBS34hR656kmZI4PeFfn5DZAQ2WqeDvxo4ZT%2FKunw3DIpjtuYLXcucWdb009%2BcNglvkCIFSgkUmO1QDLdqAgA7XHoL1bflM5NtquytfH2Ref1K00LArIRsvQMsCFKT4tuLe2FDBacu9bOgA8gpchOxW6f9sRnkkBhiJbQRaSZQ8jZLtxcPHusW3SIAJAJAh1Elg9KFGeIN%2BKVDJeHwwHH0%2BojQH6oTVmzUXICic2g2j6QinV9JSQZWLO34POsNJI%2B1aVSKJ8RIwngsW7YodhYv7dVzQ7VqhMzcK2uLJwuKaR%2BnzKMjszEPL%2B3hT%2Bk6q77aCB41%2F6KwvfxH7XTH%2FrInQcEaxBZRcCWrhfHbnIlOoa%2Fn6xTbxDzxsWHd1K7KyjjKrcwJ%2FBtF8yn9d%2B%2FPW1%2BFJSNkIQoJKQazLo6VJ8do6V%2FcnT3sC5EKoZKAOiZZfnG1eFslvGu8IIJmpJQ0EoGKmdL2N93ZhhniX5xm%2B9b6%2B1fTDLeT6IBEtIcfS2pXKQhF7daBCaYDQVK5jGHkT8LwSyOVc16DQPb3bv6xkM%2F7CzS5mInrSdQmfD5xw3nzeMwkbz7U4fJxFg%2B%2Fq%2BlBeQ2DDrGCpOSAI3C7UOg7CEfncKB%2B5kN2%2BHDeKL3vq8gMJocJP3sAUbu17SrY2a94JK%2BVsGl2FvnkvnjgrEe%2Br8in%2F7SuGMBbjFevCJXbYbShQ8TXNs5M0XhfCSJNV7sgPSEi%2FMlsfK4uxfVr0nTnCEXjUZUAijyZjIZxrKLB5LwOcivJb152HVhI%2BFjI3eEI1140U8p6hmujMpw4qC0y6zNUq1hvO4%2Bx98CrtNPcstORv8cCmRwEfr7VSuZmj0z9BakQcFlChMPhh7n96tVtuJB9C9EoLVLWtstWj55ekyMaAHyGcAgvBURXKQdNNR8zNrgZvQnV41ZK1CvAZe0YiFBXYQ30rx1DQbGfFy0VMhM3Hlz%2FP4B7iqGm4v6RbZSTOFtYwU%2B68JmxxB%2F2zk8dOMoL14bD79YCDM%2BBGActdcuWcQd%2FmRWU3D1XPG%2BZLKFWpfqR%2BOWimZUvuWwxwj4Dv%2FUbi4PjS9YoX3w4X1YvrDNBBvC0fLKRwPKccIlJJptIPL6sFlFsGYZZJ2suGczWVgJLQzb5ZCfyRDSYtjkMn%2BzutOQ2n0C%2BG1LKDyB89456FsjyMX3pIdKUL2Qe%2BSTp8g8ss%2FkSKfQN45vg80q%2F1SN5tWNiZdJX1rpI0ijSS20GwWFcYdg97y%2Bm4MIVgIBpfWCe0l8jLFPxlNbf1c8HuIkPSTZqzFH6FCB%2BqkQR6hc%2FuAv3gFpXRrb3JHpL%2BK3a9uHaiJ9dNRSkAro3Nt7ZJYXe3Y63lWsiOLEC72ydvSOwpK7r172dzQle%2BRT3u9NNSGK18rl5ksODuoIPXwLjgb%2FxGOOXXqQ65DBiDf5163FGT0jM1B15zd3%2FtWwVJbVbsG%2BLJYCJ7l19kHLePh1Xpqr8lGzgz%2BJtyQ53ivR8G03NHgSM0m5SHRs2HotenOgNWcLT%2BDYpBcCSwxHj9qW0Ki0RpUm1shhwqMQSbQC8w%2F29av4XWTR6wnGfha7DlX0%2BvUv%2BRALZIyvoq%2BTY1ehUDR7SelOVpOsVWKvLZdll%2F0Zzfg78Z8BXhXifTCAVkevd0XbfyOK0Hd0uXlyafPgTOOAxcbEvL3%2BbUNlp8WWtLfKDneQ8RezB3RBRKc5DKZ41ZZYgDymPir0Zp4mFYzbkIiFO1BYkfsxnzcMxZ%2BpEWnATnHGCXm4xNRMd2LGtoyxQIL8yQ7aMWXJuMBsKPTdR1IYSDJx8Cyl%2FiqOcg0UHROpWJ%2FOSY2L8xqUWuN8kWgjWuiVAktcr8jjZKgUY0wJipCqrBmFAnX0Gq1uIAq6%2F7tLzqQrpjunyoLgSRPr2JvCXtjtQ40B3XBD8J36UQw2mYR29qwt"\
                        "&txt_lat={}&" \
                        "&txt_lng={}&" \
                        "&txt_el={}&" \
@@ -326,9 +324,9 @@ class MydomainSpider(scrapy.Spider):
                        "txt_mapCt_lng=125.44&" \
                        "txt_overlay=overlays%2FAP%2Fclm%2Fmat_1961_1990.png&" \
                        "txt_mapKey=overlays%2FAP%2Fclm%2Fmat_1961_1990_lbl.png"
-                data = data.format(i[0], i[1], el, Year, gcm)
-                #这里改写了FormRequest方法，formdata的格式不再为dic，而是请求体格式
-                result=scrapy.FormRequest(url, method='POST', formdata=data, callback=self.detail)
+                data = data.format(i[0], i[1], i[2], Year, gcm)
+
+                result=scrapy.FormRequest(url, method='POST', callback=self.detail, body = data)
 
                 yield result
 
