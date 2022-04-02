@@ -8,7 +8,7 @@ climateAP的爬虫程序；免费获取气候数据
   
   
   
-如果想使用该项目，首先cd 至项目目录输入 
+如果想使用该项目，首先在dos窗口cd至项目目录输入：   
   ```pip --default-timeout=100 install -r reuirements.txt -i https://pypi.douban.com/simple/```  
 安装完毕后  
 
