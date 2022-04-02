@@ -38,7 +38,7 @@ climateAP的爬虫程序；免费获取气候数据
 ![图片](https://user-images.githubusercontent.com/62497107/161385033-ac006673-d919-4750-8f24-27a1ed058e6a.png)
 
 **climateAP2.csv**
-![图片](https://user-images.githubusercontent.com/62497107/161385156-52a061d9-a7c0-453b-8c88-6b69c63a9393.png)
+![图片](https://user-images.githubusercontent.com/62497107/161385176-74790dfd-b3e9-4df3-9a9f-e771d8280904.png)
 
 **climateAP3.csv**
 ![图片](https://user-images.githubusercontent.com/62497107/161385139-17e88f6f-d2f0-4faf-a9f3-2fd25520d1fe.png)
