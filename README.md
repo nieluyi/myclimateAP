@@ -9,16 +9,16 @@ climateAP的爬虫程序；免费获取气候数据
   
   
 如果想使用该项目，首先cd 至项目目录输入 
-  pip --default-timeout=100 install -r reuirements.txt -i https://pypi.douban.com/simple/  
+  '<pip --default-timeout=100 install -r reuirements.txt -i https://pypi.douban.com/simple/>'  
 安装完毕后  
 
 2.项目前置
 ---
-安装完成后，需要对项目config目录下的config.json文件进行配置，  
-start_date : 气候数据开始年份，格式为 year_年份  
-end_date : 气候数据结束年份，格式为 year_年份  
-input_data : gps坐标数据的绝对路径（仅可使用csv文件），包含 lat（维度），lng（经度），el（海拔），示例文件为 '输入.csv'  
-future : 获取气候数据的情景，通常为 Select+a+GCM+and+a+period，意为选择特定时期  
+安装完成后，需要对项目config目录下的**config.json**文件进行配置，  
+**start_date** : 气候数据开始年份，格式为 year_年份  
+**end_date** : 气候数据结束年份，格式为 year_年份  
+**input_data** : gps坐标数据的绝对路径（仅可使用csv文件），包含 lat（维度），lng（经度），el（海拔），示例文件为 '输入.csv'  
+**future** : 获取气候数据的情景，通常为 Select+a+GCM+and+a+period，意为选择特定时期  
 注意：项目中的'输入.csv'文件给出了基本示例，其中变量名称/首行（lat、lng、el）不可以更改  
 
 3.启动爬虫
@@ -27,7 +27,7 @@ future : 获取气候数据的情景，通常为 Select+a+GCM+and+a+period，意
 1.py程序启动  
 通过total_Start.py文件，右键->run，启动爬虫  
 2.命令行启动  
-命令行进入项目目录，输入 scrapy crawl mydomain 启动爬虫  
+命令行进入项目目录，输入 '<scrapy crawl mydomain>' 启动爬虫  
   
 4.爬取结果
 ----
