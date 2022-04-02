@@ -31,7 +31,7 @@ climateAP的爬虫程序；免费获取气候数据
   
 4.爬取结果
 ----
-爬取的气候数据分为年度、季度、月度，分别对应**climateAP1.csv、climateAP2.csv、climateAP3.csv**三个文件；  
+爬取的气候数据分为**年度、季度、月度**，分别对应**climateAP1.csv、climateAP2.csv、climateAP3.csv**三个文件；  
 变量名称中 'max'对应'＞','min'对应'<'；  
 数据按照climateAP.net网站中给出的数据顺序进行排列，可根据网站中获取的数据与本程序获取的数据进行对照，确保数据的正确。  
  
