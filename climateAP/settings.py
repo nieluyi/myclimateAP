@@ -40,7 +40,7 @@ RANDOM_UA_TYPE = "random"
 # MIDDLEWARES 设置
 DOWNLOADER_MIDDLEWARES = {
    'climateAP.middlewares.RandomDelayMiddleware': 300,
-   'climateAP.middlewares.RandomUserAgentMiddlware': 100,
+   #'climateAP.middlewares.RandomUserAgentMiddlware': 100,
    #'DemoProjects.middlewares.RandomProxyMiddleware': 100,
 }
 
